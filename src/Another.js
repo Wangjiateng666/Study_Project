@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import WithCopyrigh from './WithCopyrigh'
 
+@WithCopyrigh
+
 class Another extends Component {
     render() {
         return (
@@ -11,4 +13,4 @@ class Another extends Component {
     }
 }
 
-export default WithCopyrigh(Another)
+export default Another
