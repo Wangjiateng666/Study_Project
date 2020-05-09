@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>redux_demo</title>
+</head>
+<body>
+    <div>
+        <button onclick="dispatch({type: 'JIAN',n:2})" >-</button>
+        <span id="countDisplay">10</span>
+        <button onclick="dispatch({type: 'JIA',n:2})" >+</button>
+    </div>
+    <script>
+        const countDisplay = document.querySelector("#countDisplay")
+        const countState = {
+            count : 5
+        }
+        const renderCount = (state) =>{
+            countDisplay.innerHTML=state.count
+        }
+        renderCount(countState) //提取渲染
+
+        const changeState = (action) =>{
+            switch(action.type){
+                case 'JIAN':
+                    countState.count -= action.n
+                    break;
+                case 'JIA':
+                    countState.count += action.n
+                    break;
+                default:
+                    break
+            }
+        }
+        const dispatch = (action) =>{
+            changeState(action)     //修改状态
+            renderCount(countState)  //渲染
+        }
+    </script>
+</body>
+</html>
