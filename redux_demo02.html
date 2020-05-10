@@ -7,52 +7,60 @@
 </head>
 <body>
     <div>
-        <button onclick="dispatch({type: 'JIAN',n:2})" >-</button>
+        <button onclick="store.dispatch({type: 'JIAN',n:2})" >-</button>
         <span id="countDisplay">10</span>
-        <button onclick="dispatch({type: 'JIA',n:2})" >+</button>
+        <button onclick="store.dispatch({type: 'JIA',n:2})" >+</button>
     </div>
     <script>
         const countDisplay = document.querySelector("#countDisplay")
         const countState = {
             count : 5
         }
-        const renderCount = (state) =>{
-            countDisplay.innerHTML=state.count
-        }
-        renderCount(countState) //提取渲染
-
-        const changeState = (action) =>{
+        const changeState = (state,action) =>{
+            if (!state){
+                return countState
+            }
             switch(action.type){
                 case 'JIAN':
-                    countState.count -= action.n
-                    break;
+                    return {
+                        ...state,
+                        count:state.count - action.n
+                    }
                 case 'JIA':
-                    countState.count += action.n
-                    break;
+                    return {
+                        ...state,
+                        count:state.count + action.n
+                    }
                 default:
-                    break
+                    return state
             }
         }
 
-        const createStore = (state, changestate) =>{
+        const createStore = (changestate) =>{
+            let state=null
             const getState = () => state
             const listeners = []
             const subscribe = (listener) => listeners.push(listener)
             const dispatch = (action) => {
-                changeState(action)
+                state = changeState(state,action)
                 listeners.forEach(listener => listener())
             }
+            dispatch({})
             return {
                 getState,
                 dispatch,
                 subscribe
             }
         }
-        const store = createStore(countState,changeState)
+        console.log(createStore())
+        const store = createStore(changeState)
 
         const renderCount = () => {
             countDisplay.innerHTML = store.getState().count
         }
+        renderCount()
+
+        store.subscribe(renderCount)
 
     </script>
 </body>
